@@ -3,6 +3,7 @@ Commands to run application
 1. npm install 
 2. meteor
 
+`mongoexport --db meteor --collection temperatureData --port 3001 --out temperatureData.json`
 
 # Documentation
 
@@ -26,7 +27,14 @@ Example of single data point
 }
 ```
 
+
+
 # References
 
 https://docs.meteor.com/api/assets.html
 https://www.mongodb.com/blog/post/schema-design-for-time-series-data-in-mongodb
+https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript
+
+
+Exporting MongoDB Data 
+https://riptutorial.com/meteor/example/12785/export-a-collection-to-json
