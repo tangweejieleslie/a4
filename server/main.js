@@ -1,38 +1,55 @@
-import { Meteor } from 'meteor/meteor';
-import { LinksCollection } from '/imports/api/links';
-import * as Papa from 'papaparse';
+import { Meteor } from "meteor/meteor";
+import { LinksCollection } from "/imports/api/links";
+import * as Papa from "papaparse";
 
 function insertLink({ title, url }) {
-  LinksCollection.insert({title, url, createdAt: new Date()});
+  LinksCollection.insert({ title, url, createdAt: new Date() });
 }
 
-function csvToJson(csvData){
-  let json = {};
-  // Note: index 
+function csvToJson(csvData) {
+
+  // Note: index
   // 0: roomNumber
   // 1: date
   // https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript
   // 2: temperature
-  
-  // Iterate through all CSV data, 0: headers
+
+  // We want to organize the date in by date stamp, first step is to get all unique dates
   let distinctDates = [];
-  let unique = [];
-  for(let i = 1; i < csvData.length; i++){
+  let uniqueDate = [];
+  for (let i = 1; i < csvData.length; i++) {
     let date = csvData[i][1];
-    if(!unique[date]){
+    if (!uniqueDate[date]) {
       distinctDates.push(date);
-      unique[date] = 1;
+      uniqueDate[date] = 1;
     }
   }
-  console.log("UniqueDates: " + distinctDates.length)
+  // console.log("UniqueDates: " + distinctDates[0] + distinctDates.length);
+
+  const finalData = distinctDates.map((distinctDate) => {
+    return [null, null, null, null, null, null, null, distinctDate];
+    // index 0 to 6 corresponds to room number, index 7 represents date
+  });
+
+  // Iterate through all CSV data, and match data by date TODO: could be optimized if there's time
+  for (let i = 0; i < distinctDates.length; i++) {
+    for (let j = 1; j < csvData.length; j++) {
+      if(distinctDates[i] == csvData[j][1]){
+        let roomNum = parseInt(csvData[j][0]);
+        let temp = parseFloat(csvData[j][2]);
+        finalData[i][roomNum] = temp;
+      }
+    }
+  }
+  return finalData;
 }
 
-
 Meteor.startup(() => {
-  const csv = Assets.getText('room-temperatures.csv');
+  const csv = Assets.getText("room-temperatures.csv");
   const data = Papa.parse(csv).data;
-  console.log(data[0]);
-  console.log(data[1]);
-  console.log(data[3][0]);
-  csvToJson(data);
+  // console.log(data[0]);
+  // console.log(data[1]);
+  // console.log(data[3][0]);
+  const endData = csvToJson(data);
+  console.log(endData[0]);
 });
