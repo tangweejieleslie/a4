@@ -72,4 +72,5 @@ Meteor.startup(() => {
     };
     TemperatureDataCollections.insert(temp);
   }
+  console.log("Data Added!");
 });
