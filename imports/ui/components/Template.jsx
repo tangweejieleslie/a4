@@ -6,18 +6,27 @@ import { TDCollections } from "../../api/temperatureData";
 import Dygraph from "dygraphs";
 import { Meteor } from "meteor/meteor";
 
-Meteor.subscribe("pub_temp_data");
-let DATA;
+function formatForGraph(data) {
+  let dataArray = [];
 
-Tracker.autorun(() => {
-  DATA = TDCollections.find({
-    date: {
-      $gt: "2013-10-02T05:00:00",
-      $lt: "2013-10-03T15:15:00",
-    },
-  }).fetch();
-  console.log(DATA);
-});
+  for (let i = 0; i < data.length; i++) {
+    let date = data[i].date;
+    let roomTemperature = data[i].roomTemperature;
+    let tempArray = [];
+    tempArray.push(new Date(Date.parse(date)));
+    tempArray.push(roomTemperature.room0)
+    tempArray.push(roomTemperature.room1)
+    tempArray.push(roomTemperature.room2)
+    tempArray.push(roomTemperature.room3)
+    tempArray.push(roomTemperature.room4)
+    tempArray.push(roomTemperature.room5)
+    tempArray.push(roomTemperature.room6)
+
+    dataArray.push(tempArray);
+  }
+  console.log(dataArray);
+  return dataArray;
+}
 
 class Template extends Component {
   constructor(props) {
@@ -26,26 +35,26 @@ class Template extends Component {
   }
 
   componentDidMount() {
-    let g = new Dygraph(
-      document.getElementById("graph"),
-      // For possible data formats, see http://dygraphs.com/data.html
-      // The x-values could also be dates, e.g. "2012/03/15"
-      `X,Y,Z
-              1,0,3
-              2,2,6
-              3,4,8
-              4,6,9
-              5,8,9
-              6,10,8
-              7,12,6
-              8,14,3`,
-      {
-        // options go here. See http://dygraphs.com/options.html
-        legend: "always",
-        animatedZooms: true,
-        title: "dygraphs chart template",
+    Meteor.subscribe("pub_temp_data");
+    let DATA;
+
+    Tracker.autorun(() => {
+      DATA = TDCollections.find({
+        date: {
+          $gt: "2013-10-02T05:00:00",
+          $lt: "2013-10-03T15:15:00",
+        },
+      }).fetch();
+      console.log(DATA);
+      if (DATA.length != 0) {
+        let g = new Dygraph(document.getElementById("graph"), formatForGraph(DATA), {
+          // options go here. See http://dygraphs.com/options.html
+          legend: "always",
+          animatedZooms: true,
+          title: "dygraphs chart template",
+        });
       }
-    );
+    });
   }
 
   render() {
