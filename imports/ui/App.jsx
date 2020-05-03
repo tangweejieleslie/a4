@@ -1,6 +1,4 @@
 import React from "react";
-import { Hello } from "./Hello.jsx";
-import { Info } from "./Info.jsx";
 
 import GraphControls from "./components/GraphControls";
 
