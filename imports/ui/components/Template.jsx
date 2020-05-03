@@ -1,7 +1,17 @@
 import React, { Component } from "react";
-import { TemperatureDataCollections } from "../../api/temperatureData";
+import { withTracker } from "meteor/react-meteor-data";
+import { useTracker } from "meteor/react-meteor-data";
+import { Tracker } from "meteor/tracker";
+import { TDCollections } from "../../api/temperatureData";
 import Dygraph from "dygraphs";
+import { Meteor } from "meteor/meteor";
 
+Meteor.subscribe('pub_temp_data');
+
+Tracker.autorun(()=>{
+    const data = TDCollections.find({}).fetch();
+    console.log(data);
+})
 
 class Template extends Component {
   constructor(props) {
@@ -9,6 +19,7 @@ class Template extends Component {
     this.state = {};
   }
 
+  
 
   componentDidMount() {
     let g = new Dygraph(
@@ -36,10 +47,7 @@ class Template extends Component {
   render() {
     return (
       <div className="Template">
-          This is a template
-          <div id="graph">
-
-          </div>
+        <div id="graph"></div>
       </div>
     );
   }
