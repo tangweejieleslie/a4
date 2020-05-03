@@ -4,8 +4,6 @@ import { Tracker } from "meteor/tracker";
 import Dygraph from "dygraphs";
 
 import { TDCollections } from "../../api/temperatureData";
-import './graph.css'
-
 
 function formatForGraph(data) {
   let dataArray = [];
@@ -25,7 +23,7 @@ function formatForGraph(data) {
 
     dataArray.push(tempArray);
   }
-  console.log(dataArray);
+  // console.log(dataArray);
   return dataArray;
 }
 
@@ -49,7 +47,7 @@ class Template extends Component {
           $lt: this.state.endDate,
         },
       }).fetch();
-      console.log(DATA);
+      // console.log(DATA);
       if (DATA.length != 0) {
         let g = new Dygraph(document.getElementById("graph"), formatForGraph(DATA), {
           // options go here. See http://dygraphs.com/options.html
@@ -65,7 +63,7 @@ class Template extends Component {
   render() {
     return (
       <div className="Template">
-        <div id="graph" class="graph-container"></div>
+        <div id="graph" className="graph-container"></div>
       </div>
     );
   }
