@@ -1,0 +1,8 @@
+.GraphControls {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    margin: 5px;
+}

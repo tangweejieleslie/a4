@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Graph from "./Graph";
+import "./GraphControls.css";
 
 class Template extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Template extends Component {
       endDate: "2013-10-03",
       endTime: "15:15:00",
       sampleSize: 0,
+      sliderValue: 1,
     };
   }
 
@@ -37,36 +39,59 @@ class Template extends Component {
     });
   }
 
+  handleSliderValue(event) {
+    this.setState({
+      sliderValue: event.target.value,
+    });
+  }
+
   render() {
     return (
-      <div className="Template">
-        Start Date
+      <div className="GraphControls">
+        <div className="container">
+          Start Date
+          <input
+            type="date"
+            value={this.state.startDate}
+            onChange={() => this.handleStartDate(event)}
+          />
+          End Date
+          <input
+            type="date"
+            value={this.state.endDate}
+            onChange={() => this.handleEndDate(event)}
+          />
+        </div>
+        <div className="container">
+          Start Time
+          <input
+            type="time"
+            value={this.state.startTime}
+            onChange={() => this.handleStartTime(event)}
+          />
+          End Time
+          <input
+            type="time"
+            value={this.state.endTime}
+            onChange={() => this.handleEndTime(event)}
+          />
+        </div>
+        <div className="container">Slider</div>
         <input
-          type="date"
-          value={this.state.startDate}
-          onChange={() => this.handleStartDate(event)}
-        />
-        End Date
-        <input
-          type="date"
-          value={this.state.endDate}
-          onChange={() => this.handleEndDate(event)}
-        />
+          type="range"
+          id="points"
+          name="points"
+          min="1"
+          max="13"
+          value={this.state.sliderValue}
+          onChange={() => this.handleSliderValue(event)}
+        ></input>
+        {Math.pow(2,this.state.sliderValue)}
+
         <br></br>
-        Start Time
-        <input
-          type="time"
-          value={this.state.startTime}
-          onChange={() => this.handleStartTime(event)}
-        />
-        End Time
-        <input
-          type="time"
-          value={this.state.endTime}
-          onChange={() => this.handleEndTime(event)}
-        />
-        <br></br>
-        <Graph />
+        <div className="container">
+          <Graph />
+        </div>
       </div>
     );
   }
