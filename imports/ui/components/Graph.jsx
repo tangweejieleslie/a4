@@ -100,6 +100,7 @@ class Template extends Component {
     let DATA;
 
     Tracker.autorun(() => {
+      // TODO: optimize the mongoDB data load by considering the sample size as well
       DATA = TDCollections.find({
         date: {
           $gt: this.state.startDate,
