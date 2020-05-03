@@ -10,6 +10,8 @@ class Template extends Component {
       startTime: "15:00:00",
       endDate: "2013-10-03",
       endTime: "15:15:00",
+      start: "",
+      end: "",
       sampleSize: 0,
       sliderValue: 1,
     };
@@ -19,23 +21,41 @@ class Template extends Component {
     this.setState({
       startDate: event.target.value,
     });
-  }
-
-  handleEndDate(event) {
-    this.setState({
-      endDate: event.target.value,
-    });
+    this.computeStart();
   }
 
   handleStartTime(event) {
     this.setState({
       startTime: event.target.value,
     });
+    this.computeStart();
+  }
+
+  computeStart() {
+    let temp_start = this.state.startDate + "T" + this.state.startTime;
+    this.setState({
+      start: temp_start,
+    });
+  }
+
+  handleEndDate(event) {
+    this.setState({
+      endDate: event.target.value,
+    });
+    this.computeEnd();
   }
 
   handleEndTime(event) {
     this.setState({
       endTime: event.target.value,
+    });
+    this.computeEnd();
+  }
+
+  computeEnd() {
+    let temp_end = this.state.endDate + "T" + this.state.endTime;
+    this.setState({
+      end: temp_end,
     });
   }
 
@@ -86,11 +106,11 @@ class Template extends Component {
           value={this.state.sliderValue}
           onChange={() => this.handleSliderValue(event)}
         ></input>
-        {Math.pow(2,this.state.sliderValue)}
+        {Math.pow(2, this.state.sliderValue)}
 
         <br></br>
         <div className="container">
-          <Graph />
+          <Graph startDate={this.state.start} endDate={this.state.end} />
         </div>
       </div>
     );
