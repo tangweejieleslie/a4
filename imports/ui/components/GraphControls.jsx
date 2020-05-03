@@ -110,7 +110,7 @@ class Template extends Component {
 
         <br></br>
         <div className="container">
-          <Graph startDate={this.state.start} endDate={this.state.end} />
+          <Graph startDate={this.state.start} endDate={this.state.end} sampleSize={Math.pow(2, this.state.sliderValue)} />
         </div>
       </div>
     );

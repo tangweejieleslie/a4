@@ -46,7 +46,7 @@ function reduceData(data, sampleSize) {
   return reducedData;
 }
 
-function renderGraph(data, start, end, sample) {
+function renderGraph(data, start, end) {
   let g = new Dygraph(document.getElementById("graph"), formatForGraph(data), {
     labels: [
       "Date",
@@ -70,6 +70,7 @@ class Template extends Component {
     this.state = {
       startDate: "2013-10-02T05:00:00",
       endDate: "2013-10-03T15:15:00",
+      sampleSize: 1,
     };
   }
 
@@ -87,9 +88,14 @@ class Template extends Component {
         endDate: this.props.endDate,
       });
     }
-  }
 
-  componentDidMount() {
+    if (this.props.sampleSize !== prevProps.sampleSize) {
+      // this.fetchData(this.props.startDate);
+      this.setState({
+        sampleSize: this.props.sampleSize,
+      });
+    }
+
     Meteor.subscribe("pub_temp_data");
     let DATA;
 
@@ -102,8 +108,14 @@ class Template extends Component {
       }).fetch();
       // console.log(DATA);
       if (DATA.length != 0) {
+        let ReducedData = reduceData(DATA, this.state.sampleSize);
+        renderGraph(ReducedData, this.state.startDate, this.state.endDate);
       }
     });
+  }
+
+  componentDidMount() {
+
   }
 
   render() {
