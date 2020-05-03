@@ -31,7 +31,10 @@ function formatForGraph(data) {
 class Template extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+        startDate: "2013-10-02T05:00:00",
+        endDate: "2013-10-03T15:15:00",
+    };
   }
 
   componentDidMount() {
@@ -41,17 +44,18 @@ class Template extends Component {
     Tracker.autorun(() => {
       DATA = TDCollections.find({
         date: {
-          $gt: "2013-10-02T05:00:00",
-          $lt: "2013-10-03T15:15:00",
+          $gt: this.state.startDate,
+          $lt: this.state.endDate,
         },
       }).fetch();
       console.log(DATA);
       if (DATA.length != 0) {
         let g = new Dygraph(document.getElementById("graph"), formatForGraph(DATA), {
           // options go here. See http://dygraphs.com/options.html
+          labels: ['Date', 'Room 0', 'Room 1', 'Room 2', 'Room 3', 'Room 4', 'Room 5', 'Room 6'],
           legend: "always",
           animatedZooms: true,
-          title: "dygraphs chart template",
+          title: "Room Temperature",
         });
       }
     });

@@ -49,3 +49,7 @@ https://stackoverflow.com/questions/44611061/using-dygraph-in-react-with-redux
 
 Retrieving data from Mongo, Meteor
 https://stackoverflow.com/questions/30447361/how-to-fetch-data-from-mongodb-in-meteor-js
+
+
+Dygraph Interaction Model for Custom Events
+https://github.com/danvk/dygraphs/blob/master/tests/interaction.html
