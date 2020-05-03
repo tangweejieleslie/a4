@@ -1,3 +1,3 @@
 import { Mongo } from 'meteor/mongo';
 
-export const TemperatureDataCollections = new Mongo.Collection('temperatureData');
+export const TDCollections = new Mongo.Collection('TempData');
