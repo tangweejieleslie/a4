@@ -18,7 +18,7 @@ class Floorplan extends Component {
     });
   }
 
-  toggleRoom(e){
+  toggleRoom = e => {
     const isClickedCopy = [...this.state.isClicked];  //clone array
 
     if (this.state.isClicked[e]){
@@ -32,7 +32,7 @@ class Floorplan extends Component {
     });
   }
 
-  renderColor(){
+  renderColor = () => {
     const avgTempCopy = [...this.state.avgTemp];  //clone array
 
     for (var i = 0; i < avgTempCopy.length; i++) {
