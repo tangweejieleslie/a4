@@ -6,20 +6,24 @@ import { TDCollections } from "../../api/temperatureData";
 import Dygraph from "dygraphs";
 import { Meteor } from "meteor/meteor";
 
-Meteor.subscribe('pub_temp_data');
+Meteor.subscribe("pub_temp_data");
+let DATA;
 
-Tracker.autorun(()=>{
-    const data = TDCollections.find({}).fetch();
-    console.log(data);
-})
+Tracker.autorun(() => {
+  DATA = TDCollections.find({
+    date: {
+      $gt: "2013-10-02T05:00:00",
+      $lt: "2013-10-03T15:15:00",
+    },
+  }).fetch();
+  console.log(DATA);
+});
 
 class Template extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-
-  
 
   componentDidMount() {
     let g = new Dygraph(
