@@ -37,9 +37,15 @@ https://www.mongodb.com/blog/post/schema-design-for-time-series-data-in-mongodb
 https://stackoverflow.com/questions/15125920/how-to-get-distinct-values-from-an-array-of-objects-in-javascript
 
 
+https://www.meteor.com/tutorials/react/collections
+
 Exporting MongoDB Data 
 https://riptutorial.com/meteor/example/12785/export-a-collection-to-json
 
 
 Mounting Dygraph in React
 https://stackoverflow.com/questions/44611061/using-dygraph-in-react-with-redux
+
+
+Retrieving data from Mongo, Meteor
+https://stackoverflow.com/questions/30447361/how-to-fetch-data-from-mongodb-in-meteor-js
