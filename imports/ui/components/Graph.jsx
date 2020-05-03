@@ -5,6 +5,8 @@ import Dygraph from "dygraphs";
 
 import { TDCollections } from "../../api/temperatureData";
 
+let graphInstance;
+
 function formatForGraph(data) {
   let dataArray = [];
 
@@ -47,21 +49,26 @@ function reduceData(data, sampleSize) {
 }
 
 function renderGraph(data, start, end) {
-  let g = new Dygraph(document.getElementById("graph"), formatForGraph(data), {
-    labels: [
-      "Date",
-      "Room 0",
-      "Room 1",
-      "Room 2",
-      "Room 3",
-      "Room 4",
-      "Room 5",
-      "Room 6",
-    ],
-    legend: "always",
-    animatedZooms: true,
-    title: "Room Temperature",
-  });
+  graphInstance = new Dygraph(
+    document.getElementById("graph"),
+    formatForGraph(data),
+    {
+      labels: [
+        "Date",
+        "Room 0",
+        "Room 1",
+        "Room 2",
+        "Room 3",
+        "Room 4",
+        "Room 5",
+        "Room 6",
+      ],
+      legend: "always",
+      animatedZooms: true,
+      title: "Room Temperature",
+      // visibility: [true,false,false,false,false,false],
+    }
+  );
 }
 
 class Template extends Component {
@@ -107,7 +114,7 @@ class Template extends Component {
           $lt: this.state.endDate,
         },
       }).fetch();
-      // console.log(DATA);
+      // console.log(DATA[0]);
       if (DATA.length != 0) {
         let ReducedData = reduceData(DATA, this.state.sampleSize);
         renderGraph(ReducedData, this.state.startDate, this.state.endDate);
@@ -116,16 +123,35 @@ class Template extends Component {
   }
 
   componentDidMount() {
-
+    let data = {
+      date: new Date(),
+      roomTemperature: {
+        room0: null,
+        room1: null,
+        room2: null,
+        room3: null,
+        room4: null,
+        room5: null,
+        room6: null,
+      },
+    };
+    renderGraph(data, this.state.startDate, this.state.endDate);
   }
+
+  toggleVisibility() {}
 
   render() {
     return (
       <div className="Template">
-        <div id="graph" className="graph-container"></div>
-        {/* <h1>Hi</h1>
-        <h2>{this.props.startDate}</h2>
-        <h2>{this.props.endDate}</h2> */}
+        <div
+          id="graph"
+          width="800px"
+          height="500px"
+          className="graph-container"
+        ></div>
+        <h3>Toggle Visibility</h3>
+        Placeholder for floor plan Toggle
+        {/* <checkbox>A</checkbox> */}
       </div>
     );
   }
