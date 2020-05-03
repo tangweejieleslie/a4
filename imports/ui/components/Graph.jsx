@@ -123,9 +123,9 @@ class Template extends Component {
     return (
       <div className="Template">
         <div id="graph" className="graph-container"></div>
-        <h1>Hi</h1>
+        {/* <h1>Hi</h1>
         <h2>{this.props.startDate}</h2>
-        <h2>{this.props.endDate}</h2>
+        <h2>{this.props.endDate}</h2> */}
       </div>
     );
   }
