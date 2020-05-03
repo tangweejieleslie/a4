@@ -102,7 +102,7 @@ class Template extends Component {
           id="points"
           name="points"
           min="1"
-          max="13"
+          max="12"
           value={this.state.sliderValue}
           onChange={() => this.handleSliderValue(event)}
         ></input>
