@@ -5,8 +5,6 @@ import Dygraph from "dygraphs";
 
 import { TDCollections } from "../../api/temperatureData";
 
-let graphInstance;
-
 function formatForGraph(data) {
   let dataArray = [];
 
@@ -48,8 +46,10 @@ function reduceData(data, sampleSize) {
   return reducedData;
 }
 
+let graph_reference;
+
 function renderGraph(data, start, end) {
-  graphInstance = new Dygraph(
+  return new Dygraph(
     document.getElementById("graph"),
     formatForGraph(data),
     {
@@ -66,7 +66,7 @@ function renderGraph(data, start, end) {
       legend: "always",
       animatedZooms: true,
       title: "Room Temperature",
-      // visibility: [true,false,false,false,false,false],
+      visibility: [true, false, true, false, false, false, false]
     }
   );
 }
@@ -117,28 +117,31 @@ class Template extends Component {
       // console.log(DATA[0]);
       if (DATA.length != 0) {
         let ReducedData = reduceData(DATA, this.state.sampleSize);
-        renderGraph(ReducedData, this.state.startDate, this.state.endDate);
+        graph_reference = renderGraph(ReducedData, this.state.startDate, this.state.endDate);
       }
     });
   }
 
   componentDidMount() {
     let data = {
-      date: new Date(),
+      date: Date.now(),
       roomTemperature: {
-        room0: null,
-        room1: null,
-        room2: null,
-        room3: null,
-        room4: null,
-        room5: null,
-        room6: null,
+        room0: 0,
+        room1: 0,
+        room2: 0,
+        room3: 0,
+        room4: 0,
+        room5: 0,
+        room6: 0,
       },
     };
     renderGraph(data, this.state.startDate, this.state.endDate);
   }
 
-  toggleVisibility() {}
+  toggleVisibility() {
+    
+    graph_reference.setVisibility(0, false);
+  }
 
   render() {
     return (
@@ -152,6 +155,13 @@ class Template extends Component {
         <h3>Toggle Visibility</h3>
         Placeholder for floor plan Toggle
         {/* <checkbox>A</checkbox> */}
+        <button
+          onClick={() => {
+            this.toggleVisibility();
+          }}
+        >
+          Toggle Visibility for Room 0
+        </button>
       </div>
     );
   }
