@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { withTracker } from "meteor/react-meteor-data";
-import { useTracker } from "meteor/react-meteor-data";
-import { Tracker } from "meteor/tracker";
-import { TDCollections } from "../../api/temperatureData";
-import Dygraph from "dygraphs";
 import { Meteor } from "meteor/meteor";
+import { Tracker } from "meteor/tracker";
+import Dygraph from "dygraphs";
+
+import { TDCollections } from "../../api/temperatureData";
+import './graph.css'
+
 
 function formatForGraph(data) {
   let dataArray = [];
@@ -64,7 +65,7 @@ class Template extends Component {
   render() {
     return (
       <div className="Template">
-        <div id="graph"></div>
+        <div id="graph" class="graph-container"></div>
       </div>
     );
   }
