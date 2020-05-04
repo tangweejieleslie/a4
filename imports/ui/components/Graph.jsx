@@ -66,13 +66,20 @@ function legendFormatter(data) {
   }
 
   var html = this.getLabels()[0] + ": " + data.xHTML;
+  // console.log(data.xHTML); // this is the date display
   data.series.forEach(function (series) {
     if (!series.isVisible) return;
     var labeledData = series.labelHTML + ": " + series.yHTML;
+    // console.log(labeledData);
     if (series.isHighlighted) {
       labeledData = "<b>" + labeledData + "</b>";
     }
     html += "<br>" + series.dashHTML + " " + labeledData;
+    console.log(series.dashHTML); // this is the series style 
+    // <div class="dygraph-legend-line" style="border-bottom-color: rgb(64,128,0);"></div>
+    // console.log(series.labelHTML);
+    // console.log(series.yHTML);
+
   });
   return html;
 }
@@ -91,6 +98,7 @@ function renderGraph(data, start, end, visibility) {
     ],
     legend: "always",
     labelsDiv: "legend",
+    colors: ["red", "blue", "green", "yellow", "orange", "purple"],
     legendFormatter: legendFormatter,
     animatedZooms: true,
     // title: "Room Temperature",
