@@ -5,6 +5,8 @@ import Dygraph from "dygraphs";
 
 import { TDCollections } from "../../api/temperatureData";
 
+import "./graph.css";
+
 function formatForGraph(data) {
   let dataArray = [];
 
@@ -47,28 +49,53 @@ function reduceData(data, sampleSize) {
 }
 
 let graph_reference;
+let graph_visibility = [true, true, true, true, true, true, true];
 
-function renderGraph(data, start, end) {
-  return new Dygraph(
-    document.getElementById("graph"),
-    formatForGraph(data),
-    {
-      labels: [
-        "Date",
-        "Room 0",
-        "Room 1",
-        "Room 2",
-        "Room 3",
-        "Room 4",
-        "Room 5",
-        "Room 6",
-      ],
-      legend: "always",
-      animatedZooms: true,
-      title: "Room Temperature",
-      visibility: [true, false, true, false, false, false, false]
+// https://github.com/danvk/dygraphs/blob/master/tests/legend-formatter.html
+function legendFormatter(data) {
+  if (data.x == null) {
+    // This happens when there's no selection and {legend: 'always'} is set.
+    return (
+      "<br>" +
+      data.series
+        .map(function (series) {
+          return series.dashHTML + " " + series.labelHTML;
+        })
+        .join("<br>")
+    );
+  }
+
+  var html = this.getLabels()[0] + ": " + data.xHTML;
+  data.series.forEach(function (series) {
+    if (!series.isVisible) return;
+    var labeledData = series.labelHTML + ": " + series.yHTML;
+    if (series.isHighlighted) {
+      labeledData = "<b>" + labeledData + "</b>";
     }
-  );
+    html += "<br>" + series.dashHTML + " " + labeledData;
+  });
+  return html;
+}
+
+function renderGraph(data, start, end, visibility) {
+  return new Dygraph(document.getElementById("graph"), formatForGraph(data), {
+    labels: [
+      "Date",
+      "Room 0",
+      "Room 1",
+      "Room 2",
+      "Room 3",
+      "Room 4",
+      "Room 5",
+      "Room 6",
+    ],
+    legend: "always",
+    labelsDiv: "legend",
+    legendFormatter: legendFormatter,
+    animatedZooms: true,
+    // title: "Room Temperature",
+    visibility: [true, true, true, true, true, true, true],
+  });
 }
 
 class Template extends Component {
@@ -78,6 +105,8 @@ class Template extends Component {
       startDate: "2013-10-02T05:00:00",
       endDate: "2013-10-03T15:15:00",
       sampleSize: 1,
+      visibility: [true, true, true, true, true, true, true],
+      flip: true,
     };
   }
 
@@ -97,15 +126,31 @@ class Template extends Component {
     }
 
     if (this.props.sampleSize !== prevProps.sampleSize) {
-      // this.fetchData(this.props.startDate);
       this.setState({
         sampleSize: this.props.sampleSize,
       });
     }
 
+    if (this.props.v0 !== prevProps.v0) {
+      let current = graph_visibility[0];
+      graph_visibility[0] = !current;
+      this.toggleVisibility(0);
+      this.setState({
+        visibility: graph_visibility,
+      });
+    }
+
+    if (this.props.v1 !== prevProps.v1) {
+      let current = graph_visibility[1];
+      graph_visibility[1] = !current;
+      this.toggleVisibility(1);
+      this.setState({
+        visibility: graph_visibility,
+      });
+    }
+
     Meteor.subscribe("pub_temp_data");
     let DATA;
-
     Tracker.autorun(() => {
       // TODO: optimize the mongoDB data load by considering the sample size as well
       DATA = TDCollections.find({
@@ -114,12 +159,24 @@ class Template extends Component {
           $lt: this.state.endDate,
         },
       }).fetch();
+
       // console.log(DATA[0]);
       if (DATA.length != 0) {
         let ReducedData = reduceData(DATA, this.state.sampleSize);
-        graph_reference = renderGraph(ReducedData, this.state.startDate, this.state.endDate);
+        // console.log(graph_visibility);
+
+        graph_reference = renderGraph(
+          ReducedData,
+          this.state.startDate,
+          this.state.endDate,
+          graph_visibility
+        );
       }
     });
+
+    // this.setState({
+    //   flip: !this.state.flip
+    // });
   }
 
   componentDidMount() {
@@ -135,33 +192,90 @@ class Template extends Component {
         room6: 0,
       },
     };
-    renderGraph(data, this.state.startDate, this.state.endDate);
+    graph_reference = renderGraph(
+      data,
+      this.state.startDate,
+      this.state.endDate,
+      graph_visibility
+    );
   }
 
-  toggleVisibility() {
-    
-    graph_reference.setVisibility(0, false);
-  }
+  toggleVisibility = (target) => {
+    let currentVis = graph_visibility[target];
+    let newVis = graph_visibility;
+
+    let newVisStatus = !currentVis;
+    newVis[target] = newVisStatus;
+
+    if (graph_reference != undefined) {
+      graph_reference.setVisibility(graph_visibility, newVisStatus);
+    }
+  };
 
   render() {
     return (
-      <div className="Template">
-        <div
-          id="graph"
-          width="800px"
-          height="500px"
-          className="graph-container"
-        ></div>
-        <h3>Toggle Visibility</h3>
-        Placeholder for floor plan Toggle
-        {/* <checkbox>A</checkbox> */}
-        <button
-          onClick={() => {
-            this.toggleVisibility();
-          }}
-        >
-          Toggle Visibility for Room 0
-        </button>
+      <div className="Template" key={this.props.keydata}>
+        <div className="graph-container">
+          <div id="graph"></div>
+          <div id="legend"></div>
+        </div>
+
+        <div>
+          <h3>Toggle Visibility</h3>
+          Placeholder for floor plan Toggle
+          <br></br>
+          <div>
+            <button
+              onClick={() => {
+                this.toggleVisibility(0);
+              }}
+            >
+              Room 0
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(1);
+              }}
+            >
+              Room 1
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(2);
+              }}
+            >
+              Room 2
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(3);
+              }}
+            >
+              Room 3
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(4);
+              }}
+            >
+              Room 4
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(5);
+              }}
+            >
+              Room 5
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(6);
+              }}
+            >
+              Room 6
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

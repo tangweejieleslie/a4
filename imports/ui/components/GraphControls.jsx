@@ -14,6 +14,7 @@ class Template extends Component {
       end: "",
       sampleSize: 0,
       sliderValue: 1,
+      visibility: []
     };
   }
 
@@ -65,6 +66,11 @@ class Template extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+
+  }
+
+
   render() {
     return (
       <div className="GraphControls">
@@ -110,7 +116,18 @@ class Template extends Component {
 
         <br></br>
         <div className="container">
-          <Graph startDate={this.state.start} endDate={this.state.end} sampleSize={Math.pow(2, this.state.sliderValue)} />
+          <Graph startDate={this.state.start} 
+          endDate={this.state.end} 
+          sampleSize={Math.pow(2, this.state.sliderValue)} 
+          v0={this.props.v0}
+          v1={this.props.v1}
+          v2={this.props.v2}
+          v3={this.props.v3}
+          v4={this.props.v4}
+          v5={this.props.v5}
+          v6={this.props.v6}
+          keydata={1}
+          />
         </div>
       </div>
     );
