@@ -5,6 +5,8 @@ import Dygraph from "dygraphs";
 
 import { TDCollections } from "../../api/temperatureData";
 
+import "./graph.css";
+
 function formatForGraph(data) {
   let dataArray = [];
 
@@ -49,6 +51,32 @@ function reduceData(data, sampleSize) {
 let graph_reference;
 let graph_visibility = [true, true, true, true, true, true, true];
 
+// https://github.com/danvk/dygraphs/blob/master/tests/legend-formatter.html
+function legendFormatter(data) {
+  if (data.x == null) {
+    // This happens when there's no selection and {legend: 'always'} is set.
+    return (
+      "<br>" +
+      data.series
+        .map(function (series) {
+          return series.dashHTML + " " + series.labelHTML;
+        })
+        .join("<br>")
+    );
+  }
+
+  var html = this.getLabels()[0] + ": " + data.xHTML;
+  data.series.forEach(function (series) {
+    if (!series.isVisible) return;
+    var labeledData = series.labelHTML + ": " + series.yHTML;
+    if (series.isHighlighted) {
+      labeledData = "<b>" + labeledData + "</b>";
+    }
+    html += "<br>" + series.dashHTML + " " + labeledData;
+  });
+  return html;
+}
+
 function renderGraph(data, start, end, visibility) {
   return new Dygraph(document.getElementById("graph"), formatForGraph(data), {
     labels: [
@@ -62,6 +90,8 @@ function renderGraph(data, start, end, visibility) {
       "Room 6",
     ],
     legend: "always",
+    labelsDiv: "legend",
+    legendFormatter: legendFormatter,
     animatedZooms: true,
     title: "Room Temperature",
     visibility: [true, true, true, true, true, true, true],
@@ -133,7 +163,7 @@ class Template extends Component {
       // console.log(DATA[0]);
       if (DATA.length != 0) {
         let ReducedData = reduceData(DATA, this.state.sampleSize);
-        console.log(graph_visibility);
+        // console.log(graph_visibility);
 
         graph_reference = renderGraph(
           ReducedData,
@@ -185,22 +215,67 @@ class Template extends Component {
   render() {
     return (
       <div className="Template" key={this.props.keydata}>
-        <div
-          id="graph"
-          width="800px"
-          height="500px"
-          className="graph-container"
-        ></div>
-        <h3>Toggle Visibility</h3>
-        Placeholder for floor plan Toggle
-        {/* <checkbox>A</checkbox> */}
-        <button
-          onClick={() => {
-            this.toggleVisibility(0);
-          }}
-        >
-          Toggle Visibility for Room 0
-        </button>
+        <div className="graph-container">
+          <div id="graph"></div>
+          <div id="legend"></div>
+        </div>
+
+        <div>
+          <h3>Toggle Visibility</h3>
+          Placeholder for floor plan Toggle
+          <br></br>
+          <div>
+            <button
+              onClick={() => {
+                this.toggleVisibility(0);
+              }}
+            >
+              Room 0
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(1);
+              }}
+            >
+              Room 1
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(2);
+              }}
+            >
+              Room 2
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(3);
+              }}
+            >
+              Room 3
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(4);
+              }}
+            >
+              Room 4
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(5);
+              }}
+            >
+              Room 5
+            </button>
+            <button
+              onClick={() => {
+                this.toggleVisibility(6);
+              }}
+            >
+              Room 6
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

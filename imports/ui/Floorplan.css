@@ -1,0 +1,10 @@
+.FPMainContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.itemContainer{
+    padding: 10px;
+}
