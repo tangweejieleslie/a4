@@ -51,38 +51,6 @@ function reduceData(data, sampleSize) {
 let graph_reference;
 let graph_visibility = [true, true, true, true, true, true, true];
 
-// https://github.com/danvk/dygraphs/blob/master/tests/legend-formatter.html
-function legendFormatter(data) {
-  if (data.x == null) {
-    // This happens when there's no selection and {legend: 'always'} is set.
-    return (
-      "<br>" +
-      data.series
-        .map(function (series) {
-          return series.dashHTML + " " + series.labelHTML;
-        })
-        .join("<br>")
-    );
-  }
-
-  var html = this.getLabels()[0] + ": " + data.xHTML;
-  // console.log(data.xHTML); // this is the date display
-  data.series.forEach(function (series) {
-    if (!series.isVisible) return;
-    var labeledData = series.labelHTML + ": " + series.yHTML;
-    // console.log(labeledData);
-    if (series.isHighlighted) {
-      labeledData = "<b>" + labeledData + "</b>";
-    }
-    html += "<br>" + series.dashHTML + " " + labeledData;
-    console.log(series.dashHTML); // this is the series style 
-    // <div class="dygraph-legend-line" style="border-bottom-color: rgb(64,128,0);"></div>
-    // console.log(series.labelHTML);
-    // console.log(series.yHTML);
-
-  });
-  return html;
-}
 
 function renderGraph(data, start, end, visibility) {
   return new Dygraph(document.getElementById("graph"), formatForGraph(data), {
@@ -99,7 +67,7 @@ function renderGraph(data, start, end, visibility) {
     legend: "always",
     labelsDiv: "legend",
     labelsSeparateLines: "true",
-    colors: ["red", "blue", "green", "yellow", "orange", "purple"],
+    colors: ["#ff6384", "#36a2eb", "#ffcd56", "#4bc0c0", "#9966ff", "#c9cbcf", "#9dd1f5" ],
     // legendFormatter: legendFormatter,
     animatedZooms: true,
     // title: "Room Temperature",
@@ -230,11 +198,11 @@ class Template extends Component {
         </div>
 
         <div>
-          <h3>Toggle Visibility</h3>
-          Placeholder for floor plan Toggle
+          <h3>Toggle Data Visibility</h3>
           <br></br>
           <div>
-            <button
+            <button 
+            className="button0"
               onClick={() => {
                 this.toggleVisibility(0);
               }}
@@ -242,6 +210,7 @@ class Template extends Component {
               Room 0
             </button>
             <button
+            className="button1"
               onClick={() => {
                 this.toggleVisibility(1);
               }}
@@ -249,6 +218,7 @@ class Template extends Component {
               Room 1
             </button>
             <button
+            className="button2"
               onClick={() => {
                 this.toggleVisibility(2);
               }}
@@ -256,6 +226,7 @@ class Template extends Component {
               Room 2
             </button>
             <button
+            className="button3"
               onClick={() => {
                 this.toggleVisibility(3);
               }}
@@ -263,6 +234,7 @@ class Template extends Component {
               Room 3
             </button>
             <button
+            className="button4"
               onClick={() => {
                 this.toggleVisibility(4);
               }}
@@ -270,6 +242,7 @@ class Template extends Component {
               Room 4
             </button>
             <button
+            className="button5"
               onClick={() => {
                 this.toggleVisibility(5);
               }}
@@ -277,6 +250,7 @@ class Template extends Component {
               Room 5
             </button>
             <button
+            className="button6"
               onClick={() => {
                 this.toggleVisibility(6);
               }}

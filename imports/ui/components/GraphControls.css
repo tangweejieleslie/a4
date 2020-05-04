@@ -4,6 +4,20 @@
 }
 
 .container {
-    margin: 5px;
-    
+    margin: 5px;  
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.label {
+    padding: 4px;
+}
+
+.slider {
+    width: 150px;
+}
+
+.inputBox{
+    width: 150px;
 }
