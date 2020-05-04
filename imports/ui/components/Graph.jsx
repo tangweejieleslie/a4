@@ -98,17 +98,20 @@ class Template extends Component {
     }
 
     if (this.props.sampleSize !== prevProps.sampleSize) {
-      // this.fetchData(this.props.startDate);
       this.setState({
         sampleSize: this.props.sampleSize,
       });
     }
 
-    if (this.props.visibility !== prevProps.visibility) {
-      // this.fetchData(this.props.startDate);
-      console.log("Visibility Props" + this.props.visibility);
-
+    if (this.props.v1 !== prevProps.v1) {
+      let tempVis = this.state.visibility;
+      tempVis[1] = this.props.v1;
+      console.log(tempVis);
+      this.setState({
+        visibility: tempVis,
+      });
     }
+
     
     Meteor.subscribe("pub_temp_data");
     let DATA;
@@ -124,7 +127,7 @@ class Template extends Component {
       // console.log(DATA[0]);
       if (DATA.length != 0) {
         let ReducedData = reduceData(DATA, this.state.sampleSize);
-        console.log(this.state.visibility);
+        // console.log(this.state.visibility);
         graph_reference = renderGraph(ReducedData, this.state.startDate, this.state.endDate, this.state.visibility);
       }
     });

@@ -67,13 +67,6 @@ class Template extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.visibility !== prevProps.visibility) {
-      // this.fetchData(this.props.startDate);
-      this.setState({
-        visibility: this.props.visibility,
-      });
-    }
-    // console.log("Visibility Props" + this.state.visibility[0]);
 
   }
 
@@ -126,7 +119,13 @@ class Template extends Component {
           <Graph startDate={this.state.start} 
           endDate={this.state.end} 
           sampleSize={Math.pow(2, this.state.sliderValue)} 
-          visibility={this.state.visibility}
+          v0={this.props.v0}
+          v1={this.props.v1}
+          v2={this.props.v2}
+          v3={this.props.v3}
+          v4={this.props.v4}
+          v5={this.props.v5}
+          v6={this.props.v6}
           />
         </div>
       </div>

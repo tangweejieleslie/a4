@@ -8,7 +8,7 @@ class Floorplan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isClicked: [true, true, true, true, true, true, true],
+      isClicked: [true, true, true, true, true, true, true, true],
       avgTemp: [0, 0, 0, 0, 0, 0, 0],
     };
   }
@@ -20,7 +20,6 @@ class Floorplan extends Component {
   }
 
   toggleRoom = (e) => {
-    
     const isClickedCopy = [...this.state.isClicked]; //clone array
 
     if (this.state.isClicked[e]) {
@@ -49,7 +48,15 @@ class Floorplan extends Component {
   render() {
     return (
       <div>
-        <GraphControls visibility={10} />
+        <GraphControls
+          v0={this.state.isClicked[0]}
+          v1={this.state.isClicked[1]}
+          v2={this.state.isClicked[2]}
+          v3={this.state.isClicked[3]}
+          v4={this.state.isClicked[4]}
+          v5={this.state.isClicked[5]}
+          v6={this.state.isClicked[6]}
+        />
         <FloorplanView
           isClicked={this.state.isClicked}
           avgTemp={this.renderColor()}
