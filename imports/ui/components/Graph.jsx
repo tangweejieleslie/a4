@@ -47,28 +47,25 @@ function reduceData(data, sampleSize) {
 }
 
 let graph_reference;
+let graph_visibility = [true, true, true, true, true, true, true];
 
 function renderGraph(data, start, end, visibility) {
-  return new Dygraph(
-    document.getElementById("graph"),
-    formatForGraph(data),
-    {
-      labels: [
-        "Date",
-        "Room 0",
-        "Room 1",
-        "Room 2",
-        "Room 3",
-        "Room 4",
-        "Room 5",
-        "Room 6",
-      ],
-      legend: "always",
-      animatedZooms: true,
-      title: "Room Temperature",
-      visibility: [true, true, true, true, true, true, true]
-    }
-  );
+  return new Dygraph(document.getElementById("graph"), formatForGraph(data), {
+    labels: [
+      "Date",
+      "Room 0",
+      "Room 1",
+      "Room 2",
+      "Room 3",
+      "Room 4",
+      "Room 5",
+      "Room 6",
+    ],
+    legend: "always",
+    animatedZooms: true,
+    title: "Room Temperature",
+    visibility: [true, true, true, true, true, true, true],
+  });
 }
 
 class Template extends Component {
@@ -78,7 +75,8 @@ class Template extends Component {
       startDate: "2013-10-02T05:00:00",
       endDate: "2013-10-03T15:15:00",
       sampleSize: 1,
-      visibility: [true, true, true, true, true, true, true]
+      visibility: [true, true, true, true, true, true, true],
+      flip: true,
     };
   }
 
@@ -103,19 +101,26 @@ class Template extends Component {
       });
     }
 
-    if (this.props.v1 !== prevProps.v1) {
-      let tempVis = this.state.visibility;
-      tempVis[1] = this.props.v1;
-      console.log(tempVis);
+    if (this.props.v0 !== prevProps.v0) {
+      let current = graph_visibility[0];
+      graph_visibility[0] = !current;
+      this.toggleVisibility(0);
       this.setState({
-        visibility: tempVis,
+        visibility: graph_visibility,
       });
     }
 
-    
+    if (this.props.v1 !== prevProps.v1) {
+      let current = graph_visibility[1];
+      graph_visibility[1] = !current;
+      this.toggleVisibility(1);
+      this.setState({
+        visibility: graph_visibility,
+      });
+    }
+
     Meteor.subscribe("pub_temp_data");
     let DATA;
-
     Tracker.autorun(() => {
       // TODO: optimize the mongoDB data load by considering the sample size as well
       DATA = TDCollections.find({
@@ -124,13 +129,24 @@ class Template extends Component {
           $lt: this.state.endDate,
         },
       }).fetch();
+
       // console.log(DATA[0]);
       if (DATA.length != 0) {
         let ReducedData = reduceData(DATA, this.state.sampleSize);
-        // console.log(this.state.visibility);
-        graph_reference = renderGraph(ReducedData, this.state.startDate, this.state.endDate, this.state.visibility);
+        console.log(graph_visibility);
+
+        graph_reference = renderGraph(
+          ReducedData,
+          this.state.startDate,
+          this.state.endDate,
+          graph_visibility
+        );
       }
     });
+
+    // this.setState({
+    //   flip: !this.state.flip
+    // });
   }
 
   componentDidMount() {
@@ -146,17 +162,29 @@ class Template extends Component {
         room6: 0,
       },
     };
-    renderGraph(data, this.state.startDate, this.state.endDate, this.state.visibility);
+    graph_reference = renderGraph(
+      data,
+      this.state.startDate,
+      this.state.endDate,
+      graph_visibility
+    );
   }
 
-  toggleVisibility() {
-    
-    graph_reference.setVisibility(0, false);
-  }
+  toggleVisibility = (target) => {
+    let currentVis = graph_visibility[target];
+    let newVis = graph_visibility;
+
+    let newVisStatus = !currentVis;
+    newVis[target] = newVisStatus;
+
+    if (graph_reference != undefined) {
+      graph_reference.setVisibility(graph_visibility, newVisStatus);
+    }
+  };
 
   render() {
     return (
-      <div className="Template">
+      <div className="Template" key={this.props.keydata}>
         <div
           id="graph"
           width="800px"
@@ -168,7 +196,7 @@ class Template extends Component {
         {/* <checkbox>A</checkbox> */}
         <button
           onClick={() => {
-            this.toggleVisibility();
+            this.toggleVisibility(0);
           }}
         >
           Toggle Visibility for Room 0

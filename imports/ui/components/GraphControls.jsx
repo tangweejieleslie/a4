@@ -126,6 +126,7 @@ class Template extends Component {
           v4={this.props.v4}
           v5={this.props.v5}
           v6={this.props.v6}
+          keydata={1}
           />
         </div>
       </div>

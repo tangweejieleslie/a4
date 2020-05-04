@@ -31,7 +31,7 @@ class Floorplan extends Component {
     this.setState({
       isClicked: isClickedCopy,
     });
-    console.log(this.state.isClicked);
+    // console.log(this.state.isClicked);
   };
 
   renderColor = () => {
