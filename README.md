@@ -59,6 +59,10 @@ https://stackoverflow.com/questions/30447361/how-to-fetch-data-from-mongodb-in-m
 Dygraph Interaction Model for Custom Events
 https://github.com/danvk/dygraphs/blob/master/tests/interaction.html
 
+Meteor Manifest.json, PWA 
+https://forums.meteor.com/t/is-meteor-creating-its-own-manifest-json-file/25627/5
+https://web.dev/add-manifest/
+
 ## File Structure 
 
 	client/
