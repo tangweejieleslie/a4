@@ -93,7 +93,7 @@ function renderGraph(data, start, end, visibility) {
     labelsDiv: "legend",
     legendFormatter: legendFormatter,
     animatedZooms: true,
-    title: "Room Temperature",
+    // title: "Room Temperature",
     visibility: [true, true, true, true, true, true, true],
   });
 }
