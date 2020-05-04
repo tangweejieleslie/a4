@@ -14,7 +14,7 @@ class Template extends Component {
       end: "",
       sampleSize: 0,
       sliderValue: 1,
-      visibility: []
+      visibility: [],
     };
   }
 
@@ -66,67 +66,72 @@ class Template extends Component {
     });
   }
 
-  componentDidUpdate(prevProps) {
-
-  }
-
+  componentDidUpdate(prevProps) {}
 
   render() {
     return (
       <div className="GraphControls">
         <div className="container">
-          Start Date
+          <label class="label"> Start Date </label>
           <input
+            class="inputBox"
             type="date"
             value={this.state.startDate}
             onChange={() => this.handleStartDate(event)}
           />
-          End Date
+          <label class="label"> End Date </label>
           <input
+            class="inputBox"
             type="date"
             value={this.state.endDate}
             onChange={() => this.handleEndDate(event)}
           />
         </div>
         <div className="container">
-          Start Time
+          <label class="label"> Start Time </label>
           <input
+            class="inputBox"
             type="time"
             value={this.state.startTime}
             onChange={() => this.handleStartTime(event)}
           />
-          End Time
+          <label class="label"> End Time </label>
           <input
+            class="inputBox"
             type="time"
             value={this.state.endTime}
             onChange={() => this.handleEndTime(event)}
           />
         </div>
-        <div className="container">Slider</div>
-        <input
-          type="range"
-          id="points"
-          name="points"
-          min="1"
-          max="12"
-          value={this.state.sliderValue}
-          onChange={() => this.handleSliderValue(event)}
-        ></input>
-        {Math.pow(2, this.state.sliderValue)}
-
-        <br></br>
         <div className="container">
-          <Graph startDate={this.state.start} 
-          endDate={this.state.end} 
-          sampleSize={Math.pow(2, this.state.sliderValue)} 
-          v0={this.props.v0}
-          v1={this.props.v1}
-          v2={this.props.v2}
-          v3={this.props.v3}
-          v4={this.props.v4}
-          v5={this.props.v5}
-          v6={this.props.v6}
-          keydata={1}
+          <label class="label"> Sample Selection: </label>
+          <label class="label"> {Math.pow(2, this.state.sliderValue)} </label>
+
+          <input
+            // class="slider"
+            type="range"
+            id="points"
+            name="points"
+            min="1"
+            max="12"
+            value={this.state.sliderValue}
+            onChange={() => this.handleSliderValue(event)}
+          ></input>
+        </div>
+
+        <div className="container">
+          <Graph
+            startDate={this.state.start}
+            endDate={this.state.end}
+            sampleSize={Math.pow(2, this.state.sliderValue)}
+            v0={this.props.v0}
+            v1={this.props.v1}
+            v2={this.props.v2}
+            v3={this.props.v3}
+            v4={this.props.v4}
+            v5={this.props.v5}
+            v6={this.props.v6}
+            keydata={1}
           />
         </div>
       </div>
