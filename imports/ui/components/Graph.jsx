@@ -48,7 +48,7 @@ function reduceData(data, sampleSize) {
 
 let graph_reference;
 
-function renderGraph(data, start, end) {
+function renderGraph(data, start, end, visibility) {
   return new Dygraph(
     document.getElementById("graph"),
     formatForGraph(data),
@@ -66,7 +66,7 @@ function renderGraph(data, start, end) {
       legend: "always",
       animatedZooms: true,
       title: "Room Temperature",
-      visibility: [true, false, true, false, false, false, false]
+      visibility: [true, true, true, true, true, true, true]
     }
   );
 }
@@ -78,6 +78,7 @@ class Template extends Component {
       startDate: "2013-10-02T05:00:00",
       endDate: "2013-10-03T15:15:00",
       sampleSize: 1,
+      visibility: [true, true, true, true, true, true, true]
     };
   }
 
@@ -103,6 +104,12 @@ class Template extends Component {
       });
     }
 
+    if (this.props.visibility !== prevProps.visibility) {
+      // this.fetchData(this.props.startDate);
+      console.log("Visibility Props" + this.props.visibility);
+
+    }
+    
     Meteor.subscribe("pub_temp_data");
     let DATA;
 
@@ -117,7 +124,8 @@ class Template extends Component {
       // console.log(DATA[0]);
       if (DATA.length != 0) {
         let ReducedData = reduceData(DATA, this.state.sampleSize);
-        graph_reference = renderGraph(ReducedData, this.state.startDate, this.state.endDate);
+        console.log(this.state.visibility);
+        graph_reference = renderGraph(ReducedData, this.state.startDate, this.state.endDate, this.state.visibility);
       }
     });
   }
@@ -135,7 +143,7 @@ class Template extends Component {
         room6: 0,
       },
     };
-    renderGraph(data, this.state.startDate, this.state.endDate);
+    renderGraph(data, this.state.startDate, this.state.endDate, this.state.visibility);
   }
 
   toggleVisibility() {

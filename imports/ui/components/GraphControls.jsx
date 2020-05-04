@@ -14,6 +14,7 @@ class Template extends Component {
       end: "",
       sampleSize: 0,
       sliderValue: 1,
+      visibility: []
     };
   }
 
@@ -65,6 +66,18 @@ class Template extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.visibility !== prevProps.visibility) {
+      // this.fetchData(this.props.startDate);
+      this.setState({
+        visibility: this.props.visibility,
+      });
+    }
+    // console.log("Visibility Props" + this.state.visibility[0]);
+
+  }
+
+
   render() {
     return (
       <div className="GraphControls">
@@ -110,7 +123,11 @@ class Template extends Component {
 
         <br></br>
         <div className="container">
-          <Graph startDate={this.state.start} endDate={this.state.end} sampleSize={Math.pow(2, this.state.sliderValue)} />
+          <Graph startDate={this.state.start} 
+          endDate={this.state.end} 
+          sampleSize={Math.pow(2, this.state.sliderValue)} 
+          visibility={this.state.visibility}
+          />
         </div>
       </div>
     );
