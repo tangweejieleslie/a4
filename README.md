@@ -65,12 +65,42 @@ https://web.dev/add-manifest/
 
 ## File Structure 
 
-	client/
-	imports/
-		ui/		#React components
-		img/		#img src files
-	server/
-	test/
+client/
+images/		stores icons for manifest
+Icons-192.png
+Icons-512.png
+Main.css		default fallback .css for when JavaScript is not supported
+Main.html		default fallback .html for when JavaScript is not supported
+Main.jsx		the initial entry point for the application
+Manifest.json		contains data to support PWA discoverability
+
+imports/
+
+api/
+temperatureData.js	serve as the constant connection to MongoDB collections
+
+img/		contain image assets used in the application
+
+ui/
+
+components/	
+Graph.css	styling for graph render
+Graph.jsx	logic for digraph rendering
+GraphControls.css	styling for graph control components
+GraphControls.jsx	main component for various graph control components, i.e. date picker, slider, etc
+App.jsx		entry point for other React components	
+Floorplan.css		styling for floorplan
+Floorplan.jsx		floorplan svg
+FloorplanView.jsx	floorplan component
+
+private/
+Room-temperature.csv	raw data
+
+server/
+csvToArray.js		process csv into format suitable for MongoDB storage
+main.js		backend entry point
+
+
 
 ## Floorplan Details
 ### Room Toggle
